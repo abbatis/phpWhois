@@ -1,3 +1,4 @@
+#!/usr/local/bin/php -n
 <?php
 /*
 Whois.php        PHP classes to conduct whois queries
@@ -23,29 +24,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+*/
 
-if (!defined('__DOMAINDISCOVER_HANDLER__'))
-	define('__DOMAINDISCOVER_HANDLER__', 1);
+include('src/whois.main.php');
 
-require_once('whois.parser.php');
+if (isset($argv[1]))
+	$domain = $argv[1];
+else
+	$domain = 'example.com';
 
-class domaindiscover_handler
-	{
-	function parse($data_str, $query)
-		{
-		$items = array(
-                'owner' => 'Registrant:',
-                'admin' => 'Administrative Contact',
-                'tech' => 'Technical Contact',
-                'zone' => 'Zone Contact',
-                'domain.name' => 'Domain Name:',
-                'domain.changed' => 'Last updated on',
-                'domain.created' => 'Domain created on',
-                'domain.expires' => 'Domain expires on'
-		            );
+$whois = new Whois();
+$result = $whois->Lookup($domain);
 
-		return easy_parser($data_str, $items, 'dmy', false, false, true);
-		}
-	}
+print_r($result);
 ?>
